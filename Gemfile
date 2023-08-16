@@ -39,8 +39,9 @@ group :development, :test do
 end
 
 group :development do
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem 'pry', '~> 0.14.0'
+  gem 'pry-awesome_print', '~> 9.6'
+  gem 'pry-byebug'
 end
 
 gem "pg", "~> 1.5"

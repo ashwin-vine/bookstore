@@ -1,20 +1,22 @@
-# Purpose: To handle the registration of a new user
-class Users::RegistrationController < Devise::RegistrationsController
+class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   private
 
-  def repsond_with(resource, _opts = {})
+  def respond_with(resource, _opts = {})
     register_success && return if resource.persisted?
 
-    register_failure
+    register_failed(resource)
   end
 
   def register_success
-    render json: UserSerializer.new(current_user).serializable_hash, status: :ok
+    render json: {
+      message: 'Signed up sucessfully.',
+      user: UserSerializer.new(current_user)
+    }, status: :ok
   end
 
-  def register_failure
-    render json: { error: 'Failed to create user' }, status: :unprocessable_entity
+  def register_failed(resource)
+    render json: { message: resource.errors.full_messages.join(', ') }, status: :unprocessable_entity
   end
 end
