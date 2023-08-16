@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import App from "./App.vue";
+import App from "./App";
 import store from "./store";
 import router from "./router";
 import "./assets/css/nucleo-icons.css";
@@ -15,7 +15,7 @@ if (cookieExists) {
     const auth_token = localStorage.getItem("auth_token");
     const authTokenExists = auth_token !== "undefined" && auth_token !== null;
     if (authTokenExists) {
-        store.dispatch("loginUserWithToken", { auth_token });
+        store.dispatch("sessionManager/loginUserWithToken", { auth_token });
     }
 }
 

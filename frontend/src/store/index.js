@@ -1,7 +1,13 @@
 import { createStore } from "vuex";
-import sessionManager from "@/store/modules/session_manager";
+import sessionManager from "./modules/session_manager";
+import VuexPersistence from 'vuex-persist'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 export default createStore({
+  plugins: [vuexLocal.plugin],
   modules: {
     sessionManager
   },

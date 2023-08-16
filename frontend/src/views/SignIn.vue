@@ -75,9 +75,10 @@ export default {
     this.toggleHideConfig();
   },
   methods: {
-    ...mapActions(["loginUser", "logoutUser"]),
+    ...mapActions("sessionManager", ["loginUser", "logoutUser"]),
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
-    onLogin() {
+    onLogin(event) {
+      event.preventDefault();
       let data = {
         user: {
           email: this.email,
@@ -88,10 +89,8 @@ export default {
       this.resetData();
     },
     resetData() {
-      this.signUpEmail = "";
-      this.signUpPassword = "";
-      this.loginEmail = "";
-      this.loginPassword = "";
+      this.email = "";
+      this.password = "";
     },
   },
 };

@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store/index";
-import Dashboard from "../views/Dashboard.vue";
-import Tables from "../views/Tables.vue";
-import Billing from "../views/Billing.vue";
-import RTL from "../views/Rtl.vue";
-import Notifications from "../views/Notifications.vue";
-import Profile from "../views/Profile.vue";
-import SignIn from "../views/SignIn.vue";
-import SignUp from "../views/SignUp.vue";
+import store from "../store/index";
+import Dashboard from "../views/Dashboard";
+import Tables from "../views/Tables";
+import Billing from "../views/Billing";
+import RTL from "../views/Rtl";
+import Notifications from "../views/Notifications";
+import Profile from "../views/Profile";
+import SignIn from "../views/SignIn";
+import SignUp from "../views/SignUp";
+import ErrorPage from "../views/ErrorPage";
 
 const routes = [
   {
@@ -76,6 +77,14 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: "/404",
+    name: "ErrorPage",
+    component: ErrorPage,
+    meta: {
+      requiresAuth: true
+    }
+  }
 ];
 
 
@@ -87,12 +96,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    debugger
-    if (!store.getters.isLoggedIn) {
+    if (!store.getters["sessionManager/isLoggedIn"]) {
       next({ name: 'SignIn' })
     } else {
       next() // go to wherever I'm going
     }
+  } else if (to.fullPath === '/sign-in' && store.getters["sessionManager/isLoggedIn"]) {
+    next({ name: 'Dashboard' })
+  } else if (to.fullPath !== '/sign-in' && !to.matched.some(record => record.meta.requiresAuth) && store.getters["sessionManager/isLoggedIn"]) {
+      next({ name: 'ErrorPage' })
   } else {
     next() // does not require auth, make sure to always call next()!
   }
